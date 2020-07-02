@@ -16,11 +16,11 @@
     <div class="container">
         <h1 class="jumbotron"> Cars Management </h1>
         <div class="row">
-            <div class="col-lg-2">
-                <select class="form-control">
+            <div class="col-lg-2" id="searchOptions">
+                <!-- <select class="form-control">
                     <option value="type">Type</option>
                     <option value="color">Color</option>
-                </select>
+                </select> -->
             </div>
             <div class="col-lg-2">
                 <input id="searchValue" class="form-control form-control-md" type="text" placeholder="search">
@@ -37,14 +37,7 @@
             <div class="col-lg-2">
                 <button id="tableView" class="btn btn-info"> Table view </button>
             </div>
-            <div class="col-lg-12">
-                <div class="col-lg-6">
-                    Is Sun Roof <input id="isSunRoof" type="checkbox" />
-                </div>
-                <div class="col-lg-6">
-                    Is AWD <input id="isAWD" type="checkbox" />
-                </div>
-
+            <div class="col-lg-12 margin" id="checkboxes">
 
             </div>
         </div>
