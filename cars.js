@@ -8,7 +8,8 @@ const displayFunctions = {
     "list": getListItem,
     "table": getRowItem,
     "tableHeader": getRowHeaderItem,
-    "getCheckboxes": getCheckboxes
+    "getCheckboxes": getCheckboxes,
+    "searchOptions": getSearchOptions
 };
 
 const headers = [[
@@ -16,7 +17,8 @@ const headers = [[
         value: "lp",
         label: "LP",
         isVisible: true,
-        isConstant: false
+        isConstant: false,
+        isSearchable: true
     },
     {
         value: "color",
@@ -27,8 +29,8 @@ const headers = [[
     {
         value: "type",
         label: "Type",
-        isVisible: true,
-        isConstant: true
+        isVisible: false,
+        isConstant: false
     },
     {
         value: "doors",
@@ -47,6 +49,12 @@ const headers = [[
         value: "isAWD",
         label: "4 X 4",
         isVisible: false,
+        isConstant: false
+    },
+    {
+        value: "year",
+        label: "Year Created",
+        isVisible: true,
         isConstant: false
     }
 ]]
@@ -72,7 +80,8 @@ function generateSingleCar(index) {
         type: _generateType(),
         doors: _generateDoors(),
         isSunRoof: _isSunRoof(index),
-        isAWD: _isAWD(index)
+        isAWD: _isAWD(index),
+        year: _generateYear()
     };
 
 
@@ -94,6 +103,10 @@ function generateSingleCar(index) {
     function _isAWD(index) {
         return index % 2 === 0 ? true : false
     }
+    function _generateYear() {
+        return new Date().toUTCString();
+    }
+
 
 }
 
@@ -112,9 +125,12 @@ function generateSingleCar(index) {
     DOM.tableData = document.getElementById("table-data");
     DOM.tableHead = document.getElementById("table-head");
     DOM.checkboxes = document.getElementById("checkboxes");
+    DOM.searchOptions = document.getElementById("searchOptions");
+
     DOM.whatToDraw = "list"
 
     draw(DATA, DOM.listData, DOM.whatToDraw);
+    draw(DATA, DOM.searchOptions, "searchOptions");
 
     const listViewButton = document.getElementById("listView");
     const cardViewButton = document.getElementById("cardView");
@@ -245,9 +261,8 @@ function getRowHeaderItem(headers) {
     }
 }
 
-function getCheckboxes(cbData) {
-    const checkboxedDivs = cbData.filter((header) => { return !header.isConstant }).map(header => {
-
+function getCheckboxes(internalHeders) {
+    const checkboxedDivs = internalHeders.filter((header) => { return !header.isConstant }).map(header => {
         return _getCheckbox(header)
     })
 
@@ -330,3 +345,6 @@ function getRowItem(carData) {
     }
 }
 
+function getSearchOptions(){
+    // return <select> [ <option></option>,<option></option>,<option></option>,<option></option> ] </select>
+}
