@@ -111,6 +111,18 @@ function generateSingleCar(index) {
     const cardViewButton = document.getElementById("cardView");
     const tableViewButton = document.getElementById("tableView");
     const searchOperation = document.getElementById("searchOperation");
+    const isSunRoofCheckbox = document.getElementById("isSunRoof");
+    isSunRoofCheckbox.addEventListener("change", function () {
+        //this = input
+        // const [headersConfig] = headers;
+        const headersConfig = headers[0];
+        if (!Array.isArray(headersConfig)) return;
+        const isSunRoofHeaderObj = headersConfig.find(function (headerObj) {
+            return headerObj.value === "isSunRoof"
+        })
+        // const isSunRoofHeaderObj = headersConfig.find(h => h.value === "isSunRoof") shorter way
+        console.log(isSunRoofHeaderObj)
+    })
 
     listViewButton.addEventListener("click", function () {
         DOM.whatToDraw = "list";
