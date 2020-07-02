@@ -15,31 +15,38 @@ const headers = [[
         value: "lp",
         label: "LP",
         isVisible: true,
+        isConstant: true
     },
     {
         value: "color",
         label: "Color",
         isVisible: true,
+        isConstant: true
     },
     {
         value: "type",
         label: "Type",
-        isVisible: true
+        isVisible: true,
+        isConstant: true
     },
     {
         value: "doors",
         label: "Doors",
-        isVisible: true
+        isVisible: true,
+        isConstant: false
+
     },
     {
         value: "isSunRoof",
         label: "Sun Roof",
-        isVisible: true
+        isVisible: false,
+        isConstant: false
     },
     {
         value: "isAWD",
         label: "4 X 4",
-        isVisible: false
+        isVisible: false,
+        isConstant: false
     }
 ]]
 
@@ -112,17 +119,28 @@ function generateSingleCar(index) {
     const tableViewButton = document.getElementById("tableView");
     const searchOperation = document.getElementById("searchOperation");
     const isSunRoofCheckbox = document.getElementById("isSunRoof");
-    isSunRoofCheckbox.addEventListener("change", function () {
+    const isAWDCheckbox = document.getElementById("isAWD");
+    isSunRoofCheckbox.addEventListener("change", _displayColumn);
+    isAWDCheckbox.addEventListener("change", _displayColumn);
+
+    function _displayColumn(event) {
         //this = input
+
+        document.getElementById("isAWD").name
         // const [headersConfig] = headers;
+        const elementId = this.id;
+        const isChecked = this.checked;
+
         const headersConfig = headers[0];
         if (!Array.isArray(headersConfig)) return;
         const isSunRoofHeaderObj = headersConfig.find(function (headerObj) {
-            return headerObj.value === "isSunRoof"
+            console.log(this)
+            return headerObj.value === elementId
         })
         // const isSunRoofHeaderObj = headersConfig.find(h => h.value === "isSunRoof") shorter way
-        console.log(isSunRoofHeaderObj)
-    })
+        isSunRoofHeaderObj.isVisible = isChecked;
+        _drawTable(cars, headers)
+    }
 
     listViewButton.addEventListener("click", function () {
         DOM.whatToDraw = "list";
@@ -133,10 +151,14 @@ function generateSingleCar(index) {
         draw(cars, DOM.cardsData, "cards")
     })
     tableViewButton.addEventListener("click", function () {
+        _drawTable(cars, headers)
+    })
+
+    function _drawTable(cars, headers) {
         DOM.whatToDraw = "table"
         draw(cars, DOM.tableData, "table")
         draw(headers, DOM.tableHead, "tableHeader", false)
-    })
+    }
 
     searchOperation.addEventListener("click", function () {
         const value = document.getElementById("searchValue").value;
