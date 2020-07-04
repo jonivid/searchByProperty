@@ -132,17 +132,16 @@ function generateSingleCar(index) {
     DOM.tableData = document.getElementById("table-data");
     DOM.tableHead = document.getElementById("table-head");
     DOM.checkboxes = document.getElementById("checkboxes");
-    DOM.searchOptions = document.getElementById("searchOptions");
 
     DOM.whatToDraw = "list"
 
     draw(DATA, DOM.listData, DOM.whatToDraw);
-    draw(headers, DOM.searchOptions, "searchOptions");
 
     const listViewButton = document.getElementById("listView");
     const cardViewButton = document.getElementById("cardView");
     const tableViewButton = document.getElementById("tableView");
     const searchOperation = document.getElementById("searchOperation");
+    const searchOptions = document.getElementById("searchOptions");
     // const isSunRoofCheckbox = document.getElementById("isSunRoof");
     // const isAWDCheckbox = document.getElementById("isAWD");
     // isSunRoofCheckbox.addEventListener("change", _displayColumn);
@@ -179,12 +178,15 @@ function generateSingleCar(index) {
         _drawTable(DATA, headers)
     })
 
-
+    draw(headers, searchOptions, "searchOptions", false);
 
     searchOperation.addEventListener("click", function () {
         const value = document.getElementById("searchValue").value;
+
         if (!value) return;
-        const result = DATA.filter(car => { return car.type.toLowerCase() === value.toLowerCase() })
+        const searchProperties = document.getElementById("searchProperties").value;
+
+        const result = DATA.filter(car => { return car[searchProperties.toLowerCase()].toLowerCase() === value.toLowerCase() })
         if (DOM.whatToDraw === "table") {
             draw(result, DOM.tableData, "table")
             draw(headers, DOM.tableHead, "tableHeader", false)
@@ -229,12 +231,11 @@ function clearDOM() {
         if (typeof DOM[keyInDom] !== "object") return;
         DOM[keyInDom].innerHTML = "";
     })
-
 }
 function getListItem(carData) {
     const listItem = document.createElement("li");
     listItem.classList.add("list-group-item");
-    listItem.innerText = `car lp: ${carData.lp}, car color: ${carData.color}`;
+    listItem.innerText = `car lp: ${carData.lp}, car color: ${carData.color}, car type ${carData.type}`;
     return listItem;
 }
 
@@ -250,7 +251,7 @@ function getCardItem(carData) {
 
 function getRowHeaderItem(myHeaders) {
     const ths1 = myHeaders.filter((header) => { return header.isVisible }).map(header => {
-        const { label, isVisible } = heder;
+        const { label, isVisible } = header;
         if (isVisible) return _getTH(label)
     })
 
@@ -269,8 +270,8 @@ function getRowHeaderItem(myHeaders) {
     }
 }
 
-function getCheckboxes(internalHeders) {
-    const checkboxedDivs = internalHeders.filter((header) => { return !header.isConstant }).map((header) => {
+function getCheckboxes(internalHeaders) {
+    const checkboxedDivs = internalHeaders.filter((header) => { return !header.isConstant }).map((header) => {
         return _getCheckbox(header)
     })
 
@@ -354,17 +355,17 @@ function getRowItem(carData) {
 }
 
 function getSearchOptions(headers) {
-    
+
     const searchOptions = headers.filter((header) => { return header.isSearchable }).map(header => {
         return _getSearchOption(header)
     })
-    
+
     const select = document.createElement("select");
-    select.addEventListener("change", _displayProperty)
+    select.id = "searchProperties";
+    select.addEventListener("change", _displayProperty);
+    select.className = "form-control"
     select.append(...searchOptions);
-    const div = document.createElement("div");
-    div.appendChild(select);
-    return div;
+    return select;
 
 
     function _getSearchOption(sV) {
